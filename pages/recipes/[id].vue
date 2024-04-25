@@ -1,16 +1,16 @@
 <template>
   <div>
-    <p>Рецепт номер {{ id }}</p>
-    <p>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Quia alias facere
-      libero vel atque molestiae quae, fugiat placeat quisquam deserunt! Aliquid
-      numquam sapiente dolor ducimus recusandae iusto iure repellendus dolorem!
-    </p>
+    <RecipeDetail :recipe="recipe" />
   </div>
 </template>
 
 <script setup>
+import RecipeDetail from "~/components/RecipeDetail.vue";
+
 const { id } = useRoute().params;
+const uri = "https://fakestoreapi.com/products/" + id;
+
+const { data: recipe } = await useFetch(uri);
 
 definePageMeta({
   layout: "recipes",

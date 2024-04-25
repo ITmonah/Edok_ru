@@ -12,4 +12,8 @@ body {
     font-family: Montserrat;
 }
 
-@layer components {}
+@layer components {
+    .card {
+        @apply p-3 rounded-md bg-white shadow-md h-full;
+    }
+}
