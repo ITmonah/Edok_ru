@@ -11,9 +11,9 @@
     </div>
     <div class="best_rec main_div">
       <h1>Лучшие блюда</h1>
-      <div class="example"></div>
-      <div class="example"></div>
-      <div class="example"></div>
+      <RecipeCard :recipe="recipe[13]" />
+      <RecipeCard :recipe="recipe[2]" />
+      <RecipeCard :recipe="recipe[3]" />
     </div>
     <div class="best_chefs main_div">
       <h1>Лучшие повара</h1>
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+const { data: recipe } = await useFetch("https://fakestoreapi.com/products");
 </script>
 
 <style>
@@ -31,11 +32,6 @@
 }
 .best_rec {
   margin-left: 42px;
-}
-.example {
-  width: 616px;
-  height: 201px;
-  background: rgb(233, 233, 233);
 }
 .main_div {
   display: flex;

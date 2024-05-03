@@ -18,10 +18,41 @@
         <slot />
       </div>
     </div>
+    <footer class="flex justify-center">
+      <nav class="container flex justify-center gap-14">
+        <NuxtLink to="/" class="logo_f">Edok<span>.ru</span></NuxtLink>
+        <div class="footer_links">
+          <NuxtLink to="">Главная</NuxtLink>
+          <NuxtLink to="">Рецепты</NuxtLink>
+          <NuxtLink to="">Добавить рецепт</NuxtLink>
+        </div>
+        <div class="footer_tel">
+          <p>Контакты</p>
+          <a href="tel:+7999999999">+7999999999</a>
+        </div>
+      </nav>
+    </footer>
   </div>
 </template>
 
 <style scoped>
+.footer_tel {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  gap: 8px;
+}
+.footer_links {
+  display: flex;
+  flex-direction: column;
+  color: white;
+  gap: 8px;
+}
+footer {
+  background: rgb(7, 16, 19);
+  padding-bottom: 23px;
+  padding-top: 23px;
+}
 .main {
   width: 906px;
 }
@@ -49,6 +80,17 @@
   text-align: center;
 }
 .logo span {
+  color: rgb(235, 81, 96);
+}
+.logo_f {
+  color: rgb(255, 255, 255);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: 0%;
+  text-align: center;
+}
+.logo_f span {
   color: rgb(235, 81, 96);
 }
 </style>
