@@ -17,7 +17,11 @@
     </div>
     <div class="best_chefs main_div">
       <h1>Лучшие повара</h1>
-      <div class="best_chefs_div"></div>
+      <div class="best_chefs_div">
+        <BestChefCard color_chef="rgb(244, 220, 0)" />
+        <BestChefCard color_chef="rgb(172, 172, 171)" />
+        <BestChefCard color_chef="rgb(206, 148, 0)" />
+      </div>
     </div>
   </div>
 </template>
@@ -51,6 +55,11 @@ const { data: recipe } = await useFetch("https://fakestoreapi.com/products");
   height: 416px;
   background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)),
     url(assets/img/best_chef.png);
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  gap: 63px;
 }
 .enter {
   width: 100%;
