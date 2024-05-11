@@ -6,7 +6,7 @@
         <ul class="flex gap-10 links">
           <li><NuxtLink to="/">главная</NuxtLink></li>
           <li><NuxtLink to="/recipes" class="btn">рецепты</NuxtLink></li>
-          <li><NuxtLink to="/about">добавить рецепт</NuxtLink></li>
+          <li><NuxtLink to="/add_recipe">добавить рецепт</NuxtLink></li>
         </ul>
         <NuxtLink to="/user" class="links flex gap-1"
           ><img src="assets/img/Chef-hat.svg" />вход</NuxtLink

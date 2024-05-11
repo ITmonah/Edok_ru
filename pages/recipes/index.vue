@@ -128,6 +128,9 @@ export default {
   cursor: pointer;
   transform: scale(1.1);
 }
+.recipes_sort label:active {
+  color: #f86776;
+}
 .recipes_sort p {
   color: rgb(0, 0, 0);
   font-size: 16px;
@@ -171,8 +174,8 @@ export default {
   padding-right: 2.5rem;
 }
 .recipes_div {
-  margin-left: 42px;
-  margin-right: 27px;
+  margin-left: 30px;
+  margin-right: 30px;
   display: flex;
   flex-direction: column;
   gap: 23px;
