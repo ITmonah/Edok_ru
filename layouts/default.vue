@@ -13,11 +13,13 @@
         >
       </nav>
     </header>
-    <div class="flex justify-center">
-      <div class="main bg-white">
-        <slot />
+    <transition name="fade">
+      <div class="flex justify-center">
+        <div class="main bg-white">
+          <slot />
+        </div>
       </div>
-    </div>
+    </transition>
     <footer class="flex justify-center">
       <nav class="container flex justify-center gap-14">
         <NuxtLink to="/" class="logo_f">Edok<span>.ru</span></NuxtLink>
@@ -35,7 +37,7 @@
   </div>
 </template>
 
-<style scoped>
+<style>
 .footer_tel {
   display: flex;
   flex-direction: column;
@@ -92,5 +94,13 @@ footer {
 }
 .logo_f span {
   color: rgb(235, 81, 96);
+}
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
 }
 </style>

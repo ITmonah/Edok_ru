@@ -36,7 +36,6 @@
     <div class="recipes_div_foot">
       <div class="recipes_sort">
         <p>Сортировать:</p>
-
         <input
           type="radio"
           value=""

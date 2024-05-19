@@ -47,22 +47,48 @@
         <label for="input_add_name">Название рецепта</label>
         <input type="text" placeholder="..." id="input_add_name" />
       </div>
-      <div class="recipe_input">
+      <div class="recipe_input steps_recipe" v-auto-animate>
         <label for="input_add_ingr">Ингредиенты</label>
-        <div class="ingr_pols">
-          <select id="input_add_ingr"></select>
-          <div class="ingr_right">
-            <label for="ingr_input">Количество</label>
-            <input
-              type="number"
-              placeholder="..."
-              style="width: 100px"
-              id="ingr_input"
-            />
+        <div v-for="n in ingr_count" :key="n">
+          <div class="ingr_pols">
+            <select id="input_add_ingr"></select>
+            <div class="ingr_right">
+              <label v-if="n == 1" for="ingr_input">Количество</label>
+              <input
+                type="number"
+                placeholder="..."
+                style="width: 100px"
+                id="ingr_input"
+              />
+            </div>
+            <div class="ingr_right">
+              <label v-if="n == 1">Система ед.</label>
+              <select style="width: 100px"></select>
+            </div>
           </div>
-          <div class="ingr_right">
-            <label>Система ед.</label>
-            <select style="width: 100px"></select>
+          <div style="display: flex">
+            <button
+              v-if="n < 15 && ingr_count == n"
+              @click="countIngr"
+              style="margin-top: 7px; margin-right: 7px"
+            >
+              +
+            </button>
+            <button
+              v-if="ingr_count == n && ingr_count != 1"
+              @click="deleteIngr"
+              style="margin-top: 7px"
+            >
+              -
+            </button>
+            <button
+              id="clearBtn"
+              v-if="ingr_count == n && ingr_count != 1"
+              @click="clearIngr"
+              style="margin-top: 7px"
+            >
+              очистить всё
+            </button>
           </div>
         </div>
       </div>
@@ -70,14 +96,14 @@
         <label for="input_add_step">Шаги рецепта</label>
         <div v-for="n in steps_count" :key="n">
           <div
-            v-if="steps_count >= n"
+            v-if="steps_count.length >= n"
             style="display: flex; flex-direction: column; gap: 6px"
           >
             <div class="recipe_delete_step">
               <h2>{{ n }} шаг</h2>
               <button
-                v-if="steps_count == n && steps_count != 1"
-                @click="deleteStep"
+                v-if="steps_count.length == n && steps_count.length != 1"
+                @click="deleteStep(n)"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -103,8 +129,11 @@
                 </svg>
               </button>
             </div>
-            <input type="text" placeholder="..." id="input_add_step" />
-            <button v-if="n < 10 && steps_count == n" @click="countStep">
+            <input type="text" placeholder="..." id="input_add_step" required />
+            <button
+              v-if="n < 10 && steps_count.length == n"
+              @click="countStep(n)"
+            >
               +
             </button>
           </div>
@@ -194,16 +223,30 @@
 export default {
   data() {
     return {
-      steps_count: 1,
+      steps_count: [1],
+      ingr_count: 1,
     };
   },
   methods: {
-    countStep: function () {
-      this.steps_count = this.steps_count + 1;
+    countStep: function (n) {
+      this.steps_count.push(n + 1);
     },
-    deleteStep: function () {
-      if (this.steps_count > 1) {
-        this.steps_count = this.steps_count - 1;
+    deleteStep: function (n) {
+      if (this.steps_count.length > 1) {
+        this.steps_count.pop();
+      }
+    },
+    countIngr: function () {
+      this.ingr_count = this.ingr_count + 1;
+    },
+    deleteIngr: function () {
+      if (this.ingr_count > 1) {
+        this.ingr_count = this.ingr_count - 1;
+      }
+    },
+    clearIngr: function () {
+      if (this.ingr_count > 1) {
+        this.ingr_count = 1;
       }
     },
   },
@@ -418,6 +461,20 @@ input[type="radio"]:checked::before {
 }
 .recipe_delete_step button:hover {
   background: #ebebeb;
+  transform: scale(1);
+}
+.ingr_col {
+  gap: 26px;
+}
+#clearBtn {
+  background: #fff;
+  border: 0;
+  color: #eb5160;
+  font-size: 16px;
+  width: 120px;
+  margin-top: 0;
+}
+#clearBtn:hover {
   transform: scale(1);
 }
 @keyframes checkAnim {
