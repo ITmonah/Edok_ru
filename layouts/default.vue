@@ -8,9 +8,24 @@
           <li><NuxtLink to="/recipes" class="btn">рецепты</NuxtLink></li>
           <li><NuxtLink to="/add_recipe">добавить рецепт</NuxtLink></li>
         </ul>
+        <!-- 
         <NuxtLink to="/user" class="links flex gap-1"
           ><img src="assets/img/Chef-hat.svg" />вход</NuxtLink
         >
+        -->
+        <button class="links flex gap-1" @click="showModal">
+          <img src="assets/img/Chef-hat.svg" />вход
+        </button>
+        <modal
+          v-show="isModalVisible"
+          @close="closeModal"
+          @click1="showModal1"
+        />
+        <modal1
+          v-show="isModalVisible1"
+          @close1="closeModal1"
+          @close="closeModal"
+        />
       </nav>
     </header>
     <transition name="fade">
@@ -36,6 +51,39 @@
     </footer>
   </div>
 </template>
+
+<script>
+import modal from "/components/LoginForm.vue";
+import modal1 from "/components/RegForm.vue";
+
+export default {
+  name: "app",
+  components: {
+    modal,
+    modal1,
+  },
+  data() {
+    return {
+      isModalVisible: false,
+      isModalVisible1: false,
+    };
+  },
+  methods: {
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    },
+    showModal1() {
+      this.isModalVisible1 = true;
+    },
+    closeModal1() {
+      this.isModalVisible1 = false;
+    },
+  },
+};
+</script>
 
 <style>
 .footer_tel {

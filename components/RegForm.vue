@@ -11,7 +11,7 @@
           <button
             type="button"
             class="btn-close"
-            @click="close"
+            @click="close1"
             aria-label="Close modal"
           >
             <svg
@@ -37,13 +37,16 @@
               />
             </svg>
           </button>
-          <h1>Авторизация</h1>
+          <button type="button" class="btn-close-reg" @click="close">
+            Назад
+          </button>
+          <h1>Регистрация</h1>
         </div>
         <InputForm label_input="Email" type1="email" />
+        <InputForm label_input="Отображаемое имя" type1="text" />
         <InputForm label_input="Пароль" type1="text" />
         <div class="btns">
-          <button class="btn-sub">Войти</button>
-          <button class="btn-reg" @click="close1">регистрация</button>
+          <button class="btn-sub">Регистрация</button>
         </div>
       </div>
     </div>
@@ -52,13 +55,14 @@
 
 <script>
 export default {
-  name: "modal",
+  name: "modal1",
   methods: {
     close() {
-      this.$emit("close");
+      this.$emit("close1");
     },
     close1() {
-      this.$emit("click1");
+      this.$emit("close1");
+      this.$emit("close");
     },
   },
 };
@@ -103,8 +107,6 @@ export default {
   bottom: 0;
   left: 0;
   right: 0;
-  backdrop-filter: blur(5px);
-  background-color: rgba(0, 0, 0, 0.3);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -118,7 +120,7 @@ export default {
   align-items: center;
   gap: 39px;
   width: 558px;
-  height: 493px;
+  height: 557px;
   border-radius: 8px;
   background: rgb(255, 255, 255);
 }
@@ -134,6 +136,18 @@ export default {
   position: absolute;
   top: -30px;
   left: 350px;
+}
+.btn-close-reg {
+  color: rgb(235, 81, 96);
+  width: 64px;
+  height: 24px;
+  font-size: 20px;
+  font-weight: 400;
+  line-height: 24px;
+  position: absolute;
+  text-align: left;
+  top: -26px;
+  left: -150px;
 }
 .btns {
   display: flex;
