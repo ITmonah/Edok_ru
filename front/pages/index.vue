@@ -18,9 +18,9 @@
     <div class="best_chefs main_div">
       <h1>Лучшие повара</h1>
       <div class="best_chefs_div">
-        <BestChefCard color_chef="rgb(244, 220, 0)" />
-        <BestChefCard color_chef="rgb(172, 172, 171)" />
-        <BestChefCard color_chef="rgb(206, 148, 0)" />
+        <BestChefCard color_chef="rgb(244, 220, 0)" :user="user[0]" />
+        <BestChefCard color_chef="rgb(172, 172, 171)" :user="user[1]" />
+        <BestChefCard color_chef="rgb(206, 148, 0)" :user="user[2]" />
       </div>
     </div>
   </div>
@@ -28,6 +28,7 @@
 
 <script setup>
 const { data: recipe } = await useFetch("http://127.0.0.1:8000/recipe");
+const { data: user } = await useFetch("http://127.0.0.1:8000/user");
 </script>
 
 <style>

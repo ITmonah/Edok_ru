@@ -171,6 +171,7 @@ export default {
   width: 331px;
   height: 33px;
   padding-right: 2.5rem;
+  padding-left: 0.4rem;
 }
 .recipes_div {
   margin-left: 30px;

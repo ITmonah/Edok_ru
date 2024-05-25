@@ -1,7 +1,7 @@
 <template>
   <div class="chef_card">
-    <img src="assets/img/best_chef_user.jpg" alt="avatar" />
-    <p>Иван Иванов</p>
+    <div><img :src="user.img_avatar" alt="avatar" /></div>
+    <p>{{ user.name }}</p>
     <div class="chef_card_score">
       <svg
         width="24"
@@ -69,7 +69,10 @@
 </template>
 
 <script setup>
-const { color_chef } = defineProps(["color_chef"]);
+const props = defineProps({
+  color_chef: String,
+  user: String,
+});
 </script>
 
 <style scoped>
@@ -98,9 +101,9 @@ const { color_chef } = defineProps(["color_chef"]);
   line-height: 29px;
 }
 .chef_card img {
-  width: 205px;
+  max-width: 205px;
   height: 205px;
-  object-fit: fill;
+  object-fit: cover;
   border-radius: 102.5px;
 }
 </style>
