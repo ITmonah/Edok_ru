@@ -73,7 +73,7 @@
 </template>
 
 <script setup>
-const { data: recipes } = await useFetch("https://fakestoreapi.com/products");
+const { data: recipes } = await useFetch("http://127.0.0.1:8000/recipe");
 </script>
 
 <script>

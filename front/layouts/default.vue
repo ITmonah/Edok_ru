@@ -30,7 +30,7 @@
     </header>
     <transition name="fade">
       <div class="flex justify-center">
-        <div class="main bg-white">
+        <div class="main bg-white card">
           <slot />
         </div>
       </div>

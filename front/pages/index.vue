@@ -11,7 +11,7 @@
     </div>
     <div class="best_rec main_div">
       <h1>Лучшие блюда</h1>
-      <RecipeCard :recipe="recipe[13]" />
+      <RecipeCard :recipe="recipe[0]" />
       <RecipeCard :recipe="recipe[2]" />
       <RecipeCard :recipe="recipe[3]" />
     </div>
@@ -27,7 +27,7 @@
 </template>
 
 <script setup>
-const { data: recipe } = await useFetch("https://fakestoreapi.com/products");
+const { data: recipe } = await useFetch("http://127.0.0.1:8000/recipe");
 </script>
 
 <style>

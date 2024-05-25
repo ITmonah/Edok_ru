@@ -1,17 +1,19 @@
 <template>
   <div class="card_recipe">
-    <img :src="recipe.image" alt="recipe" class="thumb" />
+    <img :src="recipe.face_img" alt="recipe" class="thumb" />
     <div class="card_recipe_text">
       <div class="card_recipe_info">
         <p class="card_category">
-          Завтраки
-          <img src="assets/img/rect_krug.svg" alt="rect" /> Десерты
+          {{ recipe.category.name }}
+          <span v-for="item in recipe.mealtime" :key="item.id">
+            <img src="assets/img/rect_krug.svg" alt="rect" /> {{ item.name }}
+          </span>
         </p>
         <NuxtLink :to="`/recipes/${recipe.id}`" class="recipe_name line-clamp-1"
-          >{{ recipe.title }}
+          >{{ recipe.name }}
         </NuxtLink>
-        <p>Автор: ноунейм</p>
-        <p class="recipe_date">Дата публикации: 15.07.2023</p>
+        <p>Автор: {{ recipe.user.name }}</p>
+        <p class="recipe_date">Дата публикации: {{ created_at_date }}</p>
       </div>
       <div class="recipe_icons">
         <div class="recipe_icon_text">
@@ -61,7 +63,7 @@
         <div class="spacer"></div>
         <div class="recipe_icon_text1">
           <img src="assets/img/Timer.svg" />
-          2 часа
+          {{ recipe.cooking_time }} мин.
         </div>
       </div>
     </div>
@@ -70,6 +72,8 @@
 
 <script setup>
 const { recipe } = defineProps(["recipe"]);
+let created_at_date = recipe.created_at.slice(0, 10);
+created_at_date = created_at_date.replaceAll("-", ".");
 </script>
 
 <script>
@@ -149,10 +153,10 @@ export default {
   gap: 40px;
 }
 .recipe_icon_text1 {
-  width: 53px;
+  width: 73px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
   color: rgb(0, 0, 0);
   font-size: 16px;
@@ -190,6 +194,11 @@ export default {
   font-size: 16px;
   font-weight: 500;
   line-height: 20px;
+  gap: 6px;
+}
+.card_category span {
+  display: flex;
+  flex-direction: row;
   gap: 6px;
 }
 .thumb {
