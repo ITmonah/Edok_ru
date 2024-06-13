@@ -51,7 +51,15 @@
         <label for="input_add_ingr">Ингредиенты</label>
         <div v-for="n in ingr_count" :key="n">
           <div class="ingr_pols">
-            <select id="input_add_ingr"></select>
+            <select id="input_add_ingr">
+              <option
+                v-for="item in ingredients"
+                :key="item.id"
+                :value="item.name"
+              >
+                {{ item.name }}
+              </option>
+            </select>
             <div class="ingr_right">
               <label v-if="n == 1" for="ingr_input">Количество</label>
               <input
@@ -63,7 +71,15 @@
             </div>
             <div class="ingr_right">
               <label v-if="n == 1">Система ед.</label>
-              <select style="width: 100px"></select>
+              <select style="width: 100px">
+                <option
+                  v-for="item in system_of_calculation"
+                  :key="item.id"
+                  :value="item.name"
+                >
+                  {{ item.name }}
+                </option>
+              </select>
             </div>
           </div>
           <div style="display: flex">
@@ -92,7 +108,7 @@
           </div>
         </div>
       </div>
-      <div class="recipe_input steps_recipe">
+      <div class="recipe_input steps_recipe" v-auto-animate>
         <label for="input_add_step">Шаги рецепта</label>
         <div v-for="n in steps_count" :key="n">
           <div
@@ -217,6 +233,12 @@
 </template>
   
 <script setup>
+const { data: ingredients } = await useFetch(
+  "http://127.0.0.1:8000/ingredient/"
+);
+const { data: system_of_calculation } = await useFetch(
+  "http://127.0.0.1:8000/system_of_calculation/"
+);
 </script>
 
 <script>

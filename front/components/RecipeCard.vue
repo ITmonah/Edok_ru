@@ -1,6 +1,10 @@
 <template>
   <div class="card_recipe">
-    <img :src="recipe.face_img" alt="recipe" class="thumb" />
+    <img
+      :src="'http://127.0.0.1:8000/' + recipe.face_img"
+      alt="recipe"
+      class="thumb"
+    />
     <div class="card_recipe_text">
       <div class="card_recipe_info">
         <p class="card_category">
@@ -17,7 +21,7 @@
       </div>
       <div class="recipe_icons">
         <div class="recipe_icon_text">
-          <button v-on:click="changeColor">
+          <button v-on:click="changeColor(token)">
             <svg
               class="like-btn"
               width="30"
@@ -36,10 +40,10 @@
               />
             </svg>
           </button>
-          56
+          {{ likes }}
         </div>
         <div class="recipe_icon_text">
-          <button v-on:click="changeColorDis">
+          <button v-on:click="changeColorDis(token)">
             <svg
               class="dislike-btn"
               width="30"
@@ -58,7 +62,7 @@
               />
             </svg>
           </button>
-          3
+          {{ dizlikes }}
         </div>
         <div class="spacer"></div>
         <div class="recipe_icon_text1">
@@ -71,42 +75,166 @@
 </template>
 
 <script setup>
-const { recipe } = defineProps(["recipe"]);
-let created_at_date = recipe.created_at.slice(0, 10);
-created_at_date = created_at_date.replaceAll("-", ".");
 </script>
 
 <script>
-export default {
+export default defineComponent({
+  props: {
+    recipe: Object,
+  },
   data() {
     return {
       color: "white",
       stroke_col: "#333333",
       dis_color: "white",
+      token: "",
+      created_at_date: "",
+      likes: this.recipe.likes,
+      dizlikes: this.recipe.dizlikes,
+      like_status: 0,
+      dizlike_status: 0,
     };
   },
   methods: {
-    changeColor: function () {
-      if (this.color == "#eb5160") {
-        this.color = "white";
-        this.stroke_col = "#333333";
-      } else {
+    get_scores(token) {
+      fetch(`http://127.0.0.1:8000/score/info/${this.recipe.id}`, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            this.likes = json.likes;
+            this.dizlikes = json.dislikes;
+            this.like_status = json.status_like;
+            this.dizlike_status = json.status_dizlike;
+            this.colorSave();
+          } else {
+            this.error = true;
+          }
+        });
+    },
+    dateCount() {
+      this.created_at_date = this.recipe.created_at
+        .slice(0, 10)
+        .replaceAll("-", ".");
+    },
+    colorSave() {
+      if (this.like_status == 1) {
         this.color = "#eb5160";
         this.stroke_col = "#eb5160";
-        this.dis_color = "white";
+      }
+      if (this.dizlike_status == 1) {
+        this.dis_color = "#333333";
+        this.stroke_col = "#333333";
       }
     },
-    changeColorDis: function () {
-      if (this.dis_color == "#333333") {
-        this.dis_color = "white";
+    async changeColor(token) {
+      if (this.color == "#eb5160") {
+        let credetentials_d = {
+          id_recipe: this.recipe.id,
+        };
+        fetch(`http://127.0.0.1:8000/score/no/${this.recipe.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(credetentials_d),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.get_scores(token);
+              this.color = "white";
+              this.stroke_col = "#333333";
+            } else {
+              this.error = true;
+            }
+          });
       } else {
-        this.dis_color = "#333333";
-        this.color = "white";
-        this.stroke_col = "#333333";
+        let credetentials = {
+          id_recipe: this.recipe.id,
+        };
+        fetch(`http://127.0.0.1:8000/score/like/${this.recipe.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(credetentials),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.get_scores(token);
+              this.color = "#eb5160";
+              this.stroke_col = "#eb5160";
+              this.dis_color = "white";
+            } else {
+              this.error = true;
+            }
+          });
+      }
+    },
+    async changeColorDis(token) {
+      if (this.dis_color == "#333333") {
+        let credetentials_diz_d = {
+          id_recipe: this.recipe.id,
+        };
+        fetch(`http://127.0.0.1:8000/score/no/${this.recipe.id}`, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(credetentials_diz_d),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.get_scores(token);
+              this.dis_color = "white";
+            } else {
+              this.error = true;
+            }
+          });
+      } else {
+        let credetentials_diz = {
+          id_recipe: this.recipe.id,
+        };
+        fetch(`http://127.0.0.1:8000/score/dizlike/${this.recipe.id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(credetentials_diz),
+        })
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.get_scores(token);
+              this.dis_color = "#333333";
+              this.color = "white";
+              this.stroke_col = "#333333";
+            } else {
+              this.error = true;
+            }
+          });
       }
     },
   },
-};
+  mounted() {
+    this.dateCount();
+    this.get_scores(this.token);
+  },
+  beforeMount() {
+    this.token = localStorage.getItem("access_token");
+  },
+});
 </script>
 
 <style scoped>

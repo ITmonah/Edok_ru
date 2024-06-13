@@ -1,139 +1,207 @@
 <template>
-  <div class="bg_grey">
-    <div class="profile_head">
-      <img src="assets/img/avatar_demo.png" alt="avatar" />
-      <div class="profile_head_stats">
-        <div class="stats_div">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M6.5 12.0623C4.50627 11.6792 3 9.9255 3 7.82C3 5.43415 4.93413 3.5 7.32 3.5C7.7033 3.5 8.0749 3.54991 8.4287 3.6436C9.2199 2.64246 10.4449 2 11.82 2C13.2352 2 14.4914 2.68049 15.2794 3.73211C15.7186 3.58166 16.1898 3.5 16.68 3.5C19.0659 3.5 21 5.43415 21 7.82C21 9.9255 19.4937 11.6792 17.5 12.0623V20C17.5 20.5523 17.0523 21 16.5 21H7.5C6.9477 21 6.5 20.5523 6.5 20V12.0623Z"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M6.5 15.5H17.5"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M10 12.5V15.5"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M17.5 14V17"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M6.5 14V17"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <p>Edok123</p>
-        </div>
-        <div class="stats_div">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M11.9993 2.5L8.9428 8.7388L2 9.74555L7.02945 14.6625L5.8272 21.5L11.9993 18.2096L18.1727 21.5L16.9793 14.6625L22 9.74555L15.0956 8.7388L11.9993 2.5Z"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linejoin="round"
-            />
-          </svg>
-          <p>Рейтинг: 3.44</p>
-        </div>
-        <div class="stats_div">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-          >
-            <path
-              d="M3 21H21"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M3 18H21"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M4.5 12.5C4.5 8.35785 7.85785 5 12 5C16.1421 5 19.5 8.35785 19.5 12.5V18H4.5V12.5Z"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-            />
-            <path
-              d="M8.5 12.5V14.5"
-              stroke="#EB5160"
-              stroke-width="2"
-              stroke-linecap="round"
-            />
-            <path
-              d="M14 5V4C14 2.89543 13.1046 2 12 2C10.8954 2 10 2.89543 10 4V5"
-              stroke="#EB5160"
-              stroke-width="2"
-            />
-          </svg>
-          <p>Количество выложенных рецептов: 12</p>
-        </div>
-      </div>
+  <div>
+    <div class="error_div" v-if="error">
+      <h1>Вы вышли из аккаунта</h1>
+      <NuxtLink
+        to="/"
+        style="
+          font-size: 30px;
+          background-color: rgb(235, 81, 96);
+          color: white;
+          padding: 8px;
+          border-radius: 8px;
+          margin-top: 10px;
+        "
+        >На главную</NuxtLink
+      >
     </div>
-    <div class="profile_main">
-      <h1>Данные о пользователе</h1>
-      <div class="profile_main_input">
-        <label for="emailp_input">Email</label>
-        <input type="email" id="emailp_input" />
+    <div class="bg_grey" v-if="!error">
+      <div class="profile_head">
+        <img src="assets/img/avatar_demo.png" alt="avatar" />
+        <div class="profile_head_stats">
+          <div class="stats_div">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M6.5 12.0623C4.50627 11.6792 3 9.9255 3 7.82C3 5.43415 4.93413 3.5 7.32 3.5C7.7033 3.5 8.0749 3.54991 8.4287 3.6436C9.2199 2.64246 10.4449 2 11.82 2C13.2352 2 14.4914 2.68049 15.2794 3.73211C15.7186 3.58166 16.1898 3.5 16.68 3.5C19.0659 3.5 21 5.43415 21 7.82C21 9.9255 19.4937 11.6792 17.5 12.0623V20C17.5 20.5523 17.0523 21 16.5 21H7.5C6.9477 21 6.5 20.5523 6.5 20V12.0623Z"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6.5 15.5H17.5"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M10 12.5V15.5"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M17.5 14V17"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M6.5 14V17"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <p>{{ user.username }}</p>
+          </div>
+          <div class="stats_div">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M11.9993 2.5L8.9428 8.7388L2 9.74555L7.02945 14.6625L5.8272 21.5L11.9993 18.2096L18.1727 21.5L16.9793 14.6625L22 9.74555L15.0956 8.7388L11.9993 2.5Z"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linejoin="round"
+              />
+            </svg>
+            <p>Рейтинг: 3.44</p>
+          </div>
+          <div class="stats_div">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+            >
+              <path
+                d="M3 21H21"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M3 18H21"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M4.5 12.5C4.5 8.35785 7.85785 5 12 5C16.1421 5 19.5 8.35785 19.5 12.5V18H4.5V12.5Z"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+              <path
+                d="M8.5 12.5V14.5"
+                stroke="#EB5160"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <path
+                d="M14 5V4C14 2.89543 13.1046 2 12 2C10.8954 2 10 2.89543 10 4V5"
+                stroke="#EB5160"
+                stroke-width="2"
+              />
+            </svg>
+            <p>Количество выложенных рецептов: 12</p>
+          </div>
+        </div>
       </div>
-      <div class="profile_main_input">
-        <label for="passp_input">Пароль</label>
-        <input type="text" id="passp_input" />
+      <div class="profile_main">
+        <h1>Данные о пользователе</h1>
+        <div class="profile_main_input">
+          <label for="emailp_input">Email</label>
+          <input type="email" id="emailp_input" />
+        </div>
+        <div class="profile_main_input">
+          <label for="passp_input">Пароль</label>
+          <input type="password" id="passp_input" />
+        </div>
+        <h1>Информационные сообщения</h1>
+        <div class="profile_main_info_btn">
+          <input type="checkbox" id="switch" />
+          <label for="switch">Toggle</label>
+          <p>Получать информационные сообщения на E-mail</p>
+        </div>
+        <button style="margin-top: 37px" @click="acc_exit()">
+          Выйти из аккаунта
+        </button>
+        <button>Удалить аккаунт</button>
       </div>
-      <h1>Информационные сообщения</h1>
-      <div class="profile_main_info_btn">
-        <input type="checkbox" id="switch" />
-        <label for="switch">Toggle</label>
-        <p>Получать информационные сообщения на E-mail</p>
-      </div>
-      <button style="margin-top: 37px">Удалить аккаунт</button>
     </div>
   </div>
 </template>
 
 <script>
+export default {
+  data() {
+    return {
+      user: {},
+      authShow: false,
+      error: false,
+      det: "",
+    };
+  },
+  methods: {
+    get_user(token) {
+      fetch("http://127.0.0.1:8000/user/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            this.user = json;
+            this.authShow = true;
+          } else {
+            this.error = true;
+            this.det = json.detail;
+          }
+        });
+    },
+    async acc_exit() {
+      localStorage.setItem("access_token", "");
+      location.reload();
+    },
+  },
+  beforeMount() {
+    let token = localStorage.getItem("access_token");
+    this.get_user(token);
+  },
+};
 </script>
 
 <style scoped>
+.error_div {
+  height: 800px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 30px;
+}
+.error_div h1 {
+  font-size: 40px;
+}
 .profile_main_info_btn {
   display: flex;
   flex-direction: row;

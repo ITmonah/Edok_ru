@@ -1,6 +1,8 @@
 <template>
   <div class="chef_card">
-    <div><img :src="user.img_avatar" alt="avatar" /></div>
+    <div>
+      <img :src="'http://127.0.0.1:8000/' + user.img_avatar" alt="avatar" />
+    </div>
     <p>{{ user.name }}</p>
     <div class="chef_card_score">
       <svg
@@ -71,7 +73,7 @@
 <script setup>
 const props = defineProps({
   color_chef: String,
-  user: String,
+  user: Object,
 });
 </script>
 

@@ -4,6 +4,7 @@
       <div class="recipes_title">
         <h1>Рецепты</h1>
         <img src="assets/img/Noodles.svg" alt="Иконка" />
+        {{ $route.query.text }}
       </div>
       <div class="text-field__icon">
         <input type="text" placeholder="Название рецепта" />
@@ -59,21 +60,54 @@
         /><label for="rad3_recipes">по рейтингу</label>
       </div>
       <div>
-        <select>
-          <option>Все категории</option>
+        <select v-model="category_recipe" @change="get_recipes()">
+          <option value="all">Все категории</option>
+          <option v-for="item in mealtime" :key="item.id" :value="item.name">
+            {{ item.name }}
+          </option>
+          <option v-for="item in categorys" :key="item.id" :value="item.name">
+            {{ item.name }}
+          </option>
         </select>
       </div>
     </div>
     <div class="recipes_cards_div">
-      <div v-for="p in recipes" :key="p.id">
+      <div v-for="p in recipes.items" :key="p.id">
         <RecipeCard :recipe="p" />
+      </div>
+      <div v-if="recipes.items == 0">
+        <h1>Ничего не найдено...</h1>
+      </div>
+    </div>
+    <div class="pagination">
+      <div v-for="item in recipes.pages" :key="item">
+        <div v-if="item == 1">
+          <input
+            type="radio"
+            :id="`radio_` + item"
+            name="pagin"
+            @change="aboba(item)"
+            checked
+          />
+          <label :for="`radio_` + item">{{ item }}</label>
+        </div>
+        <div v-else>
+          <input
+            type="radio"
+            :id="`radio_` + item"
+            name="pagin"
+            @change="aboba(item)"
+          />
+          <label :for="`radio_` + item">{{ item }}</label>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-const { data: recipes } = await useFetch("http://127.0.0.1:8000/recipe");
+const { data: categorys } = await useFetch("http://127.0.0.1:8000/category/");
+const { data: mealtime } = await useFetch("http://127.0.0.1:8000/mealtime/");
 </script>
 
 <script>
@@ -81,6 +115,10 @@ export default {
   data() {
     return {
       color_btn: "rgba(0, 0, 0)",
+      page_number: 1,
+      recipes: {},
+      error: false,
+      category_recipe: "all",
     };
   },
   methods: {
@@ -91,11 +129,79 @@ export default {
         this.color = "#eb5160";
       }
     },
+    get_recipes() {
+      if (this.category_recipe == "all") {
+        fetch(
+          `http://127.0.0.1:8000/recipe/page/true?page=${this.page_number}&size=3`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.recipes = json;
+            } else {
+              this.error = true;
+            }
+          });
+      } else {
+        fetch(
+          `http://127.0.0.1:8000/recipe/page/true/category/?name=${this.category_recipe}&page=${this.page_number}&size=2`,
+          {
+            method: "GET",
+          }
+        )
+          .then((response) => response.json())
+          .then((json) => {
+            if (!json.detail) {
+              this.recipes = json;
+            } else {
+              this.error = true;
+            }
+          });
+        console.log(this.recipes.items);
+      }
+    },
+    aboba(page) {
+      this.page_number = page;
+      this.get_recipes();
+    },
+  },
+  mounted() {
+    this.get_recipes();
   },
 };
 </script>
 
 <style scoped>
+.pagination {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 21px;
+  gap: 19px;
+}
+.pagination label {
+  cursor: pointer;
+  user-select: none;
+  color: rgba(0, 0, 0, 0.4);
+  font-size: 20px;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: 0%;
+  text-align: center;
+  transition: 0.1s;
+}
+.pagination input[type="radio"]:checked + label {
+  color: rgb(0, 0, 0);
+}
+.pagination label:hover {
+  color: rgb(0, 0, 0);
+  cursor: pointer;
+  transform: scale(1.1);
+}
 .recipes_div_foot {
   display: flex;
   flex-direction: row;
@@ -107,6 +213,9 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin-top: 23px;
+}
+.pagination input {
+  display: none !important;
 }
 .recipes_sort input {
   display: none !important;
@@ -174,6 +283,7 @@ export default {
   padding-left: 0.4rem;
 }
 .recipes_div {
+  min-height: 800px;
   margin-left: 30px;
   margin-right: 30px;
   display: flex;

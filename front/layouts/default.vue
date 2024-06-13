@@ -5,15 +5,24 @@
         <NuxtLink to="/" class="logo">Edok<span>.ru</span></NuxtLink>
         <ul class="flex gap-10 links">
           <li><NuxtLink to="/">главная</NuxtLink></li>
-          <li><NuxtLink to="/recipes" class="btn">рецепты</NuxtLink></li>
-          <li><NuxtLink to="/add_recipe">добавить рецепт</NuxtLink></li>
+          <li>
+            <NuxtLink to="/recipes" class="btn">рецепты</NuxtLink>
+          </li>
+          <li v-if="!authShow">
+            <button class="links flex gap-1" @click="showModal">
+              добавить рецепт
+            </button>
+          </li>
+          <li v-if="authShow">
+            <NuxtLink :to="add_link">добавить рецепт</NuxtLink>
+          </li>
         </ul>
-        <!-- 
-        <NuxtLink to="/user" class="links flex gap-1"
-          ><img src="assets/img/Chef-hat.svg" />вход</NuxtLink
+
+        <NuxtLink to="/user" class="links flex gap-1" v-if="authShow"
+          ><img src="assets/img/me_avatar.svg" />{{ user.username }}</NuxtLink
         >
-        -->
-        <button class="links flex gap-1" @click="showModal">
+
+        <button v-if="!authShow" class="links flex gap-1" @click="showModal">
           <img src="assets/img/Chef-hat.svg" />вход
         </button>
         <modal
@@ -66,6 +75,9 @@ export default {
     return {
       isModalVisible: false,
       isModalVisible1: false,
+      authShow: false,
+      user: {},
+      add_link: "/add_recipe",
     };
   },
   methods: {
@@ -81,6 +93,27 @@ export default {
     closeModal1() {
       this.isModalVisible1 = false;
     },
+    get_auth(token) {
+      fetch("http://127.0.0.1:8000/user/me", {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            this.user = json;
+            this.authShow = true;
+          } else {
+            this.error = true;
+          }
+        });
+    },
+  },
+  beforeMount() {
+    let token = localStorage.getItem("access_token");
+    this.get_auth(token);
   },
 };
 </script>

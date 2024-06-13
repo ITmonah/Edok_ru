@@ -42,11 +42,20 @@
           </button>
           <h1>Регистрация</h1>
         </div>
-        <InputForm label_input="Email" type1="email" />
-        <InputForm label_input="Отображаемое имя" type1="text" />
-        <InputForm label_input="Пароль" type1="text" />
+        <div class="input_form">
+          <label for="auth2">Email</label>
+          <input type="email" id="auth2" v-model="login" />
+        </div>
+        <div class="input_form">
+          <label for="auth3">Отображаемое имя</label>
+          <input type="text" id="auth3" v-model="name" />
+        </div>
+        <div class="input_form">
+          <label for="auth4">Пароль</label>
+          <input type="text" id="auth4" v-model="password" />
+        </div>
         <div class="btns">
-          <button class="btn-sub">Регистрация</button>
+          <button class="btn-sub" @click="get_reg()">Регистрация</button>
         </div>
       </div>
     </div>
@@ -56,6 +65,13 @@
 <script>
 export default {
   name: "modal1",
+  data() {
+    return {
+      login: "",
+      password: "",
+      name: "",
+    };
+  },
   methods: {
     close() {
       this.$emit("close1");
@@ -64,11 +80,56 @@ export default {
       this.$emit("close1");
       this.$emit("close");
     },
+    async get_reg() {
+      let credetentials = {
+        name: this.name,
+        mail: this.login,
+        password: this.password,
+      };
+      fetch("http://127.0.0.1:8000/user/reg", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(credetentials),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            location.reload();
+          } else {
+            this.error = true;
+          }
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
+.input_form label {
+  color: rgb(0, 0, 0);
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 34px;
+  text-align: left;
+}
+.input_form input {
+  box-sizing: border-box;
+  border-bottom: 2px solid rgb(0, 0, 0);
+  background: rgb(255, 255, 255);
+  width: 432px;
+  height: 45px;
+  color: rgb(0, 0, 0);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 29px;
+  text-align: left;
+}
+.input_form {
+  display: flex;
+  flex-direction: column;
+}
 .modal_head {
   max-width: 100%;
   display: flex;
