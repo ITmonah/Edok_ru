@@ -43,7 +43,7 @@
           name="recipe_radio"
           id="rad1_recipes"
           checked
-        /><label for="rad1_recipes">по популярности</label>
+        /><label for="rad1_recipes">по рейтингу</label>
 
         <input
           type="radio"
@@ -57,7 +57,7 @@
           value=""
           name="recipe_radio"
           id="rad3_recipes"
-        /><label for="rad3_recipes">по рейтингу</label>
+        /><label for="rad3_recipes">по времени</label>
       </div>
       <div>
         <select v-model="category_recipe" @change="get_recipes()">

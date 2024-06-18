@@ -181,6 +181,7 @@ export default {
     },
     async acc_exit() {
       localStorage.setItem("access_token", "");
+      await navigateTo({ path: "/" });
       location.reload();
     },
   },

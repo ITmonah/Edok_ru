@@ -1,8 +1,16 @@
 <template>
   <div>
     <header class="shadow-sm bg-white">
-      <nav class="container mx-auto p-4">
-        <NuxtLink to="/recipes">Edok.ru</NuxtLink>
+      <nav
+        class="container mx-auto p-4"
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
+        "
+      >
+        <p>Edok.ru</p>
+        <button @click="acc_exit">Выйти из аккаунта</button>
       </nav>
     </header>
 
@@ -14,14 +22,28 @@
       class="container mx-auto p-4 flex justify-between border-t-2 bg-white w-full"
     >
       <ul class="flex gap-4">
-        <li><NuxtLink to="/">Home</NuxtLink></li>
-        <li><NuxtLink to="/add_recipe">About</NuxtLink></li>
-        <li><NuxtLink to="/recipes">Recipes</NuxtLink></li>
+        <p>Edok.ru</p>
       </ul>
     </footer>
   </div>
 </template>
-  
+
+<script>
+export default {
+  data() {
+    return {};
+  },
+  methods: {
+    async acc_exit() {
+      localStorage.setItem("access_token", "");
+      await navigateTo({ path: "/" });
+      location.reload();
+    },
+  },
+};
+</script>
+
+
   <style scoped>
 .router-link-exact-active {
   color: rgb(255, 34, 101);

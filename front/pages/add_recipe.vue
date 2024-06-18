@@ -42,193 +42,227 @@
       </svg>
     </div>
     <div class="spacer"></div>
-    <div class="recipe_inputs">
-      <div class="recipe_input">
-        <label for="input_add_name">Название рецепта</label>
-        <input type="text" placeholder="..." id="input_add_name" />
-      </div>
-      <div class="recipe_input steps_recipe" v-auto-animate>
-        <label for="input_add_ingr">Ингредиенты</label>
-        <div v-for="n in ingr_count" :key="n">
-          <div class="ingr_pols">
-            <select id="input_add_ingr">
-              <option
-                v-for="item in ingredients"
-                :key="item.id"
-                :value="item.name"
+    <form @submit.prevent="post_recipe(token)">
+      <div class="recipe_inputs">
+        <div class="recipe_input">
+          <label for="input_add_name">Название рецепта</label>
+          <input
+            type="text"
+            placeholder="..."
+            id="input_add_name"
+            v-model="name"
+            required
+            autocomplete="off"
+          />
+        </div>
+        <div class="recipe_input steps_recipe" v-auto-animate>
+          <label for="input_add_ingr1">Ингредиенты</label>
+          <div v-for="n in ingr_count" :key="n">
+            <div class="ingr_pols">
+              <select
+                :id="`input_add_ingr${n}`"
+                v-model="id_ingr[n - 1]"
+                required
               >
-                {{ item.name }}
-              </option>
-            </select>
-            <div class="ingr_right">
-              <label v-if="n == 1" for="ingr_input">Количество</label>
-              <input
-                type="number"
-                placeholder="..."
-                style="width: 100px"
-                id="ingr_input"
-              />
-            </div>
-            <div class="ingr_right">
-              <label v-if="n == 1">Система ед.</label>
-              <select style="width: 100px">
                 <option
-                  v-for="item in system_of_calculation"
+                  v-for="item in ingredients"
                   :key="item.id"
-                  :value="item.name"
+                  :value="item.id"
                 >
                   {{ item.name }}
                 </option>
               </select>
-            </div>
-          </div>
-          <div style="display: flex">
-            <button
-              v-if="n < 15 && ingr_count == n"
-              @click="countIngr"
-              style="margin-top: 7px; margin-right: 7px"
-            >
-              +
-            </button>
-            <button
-              v-if="ingr_count == n && ingr_count != 1"
-              @click="deleteIngr"
-              style="margin-top: 7px"
-            >
-              -
-            </button>
-            <button
-              id="clearBtn"
-              v-if="ingr_count == n && ingr_count != 1"
-              @click="clearIngr"
-              style="margin-top: 7px"
-            >
-              очистить всё
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class="recipe_input steps_recipe" v-auto-animate>
-        <label for="input_add_step">Шаги рецепта</label>
-        <div v-for="n in steps_count" :key="n">
-          <div
-            v-if="steps_count.length >= n"
-            style="display: flex; flex-direction: column; gap: 6px"
-          >
-            <div class="recipe_delete_step">
-              <h2>{{ n }} шаг</h2>
-              <button
-                v-if="steps_count.length == n && steps_count.length != 1"
-                @click="deleteStep(n)"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="11"
-                  height="11"
-                  viewBox="0 0 11 11"
-                  fill="none"
+              <div class="ingr_right">
+                <label v-if="n == 1" for="ingr_input1">Количество</label>
+                <input
+                  type="number"
+                  placeholder="..."
+                  style="width: 100px"
+                  :id="`ingr_input${n}`"
+                  v-model="count[n - 1]"
+                  min="1"
+                  max="9999"
+                  required
+                  autocomplete="off"
+                />
+              </div>
+              <div class="ingr_right">
+                <label v-if="n == 1" for="count_input1">Система ед.</label>
+                <select
+                  style="width: 100px"
+                  v-model="id_syst_calc[n - 1]"
+                  :id="`count_input${n}`"
+                  required
                 >
-                  <path
-                    d="M1 1L10 10"
-                    stroke="#333333"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M10 1L1 10"
-                    stroke="#333333"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
+                  <option
+                    v-for="item in system_of_calculation"
+                    :key="item.id"
+                    :value="item.id"
+                  >
+                    {{ item.name }}
+                  </option>
+                </select>
+              </div>
+            </div>
+            <div style="display: flex">
+              <button
+                v-if="n < 15 && ingr_count == n"
+                @click="countIngr"
+                style="margin-top: 7px; margin-right: 7px"
+              >
+                +
+              </button>
+              <button
+                v-if="ingr_count == n && ingr_count != 1"
+                @click="deleteIngr"
+                style="margin-top: 7px"
+              >
+                -
+              </button>
+              <button
+                id="clearBtn"
+                v-if="ingr_count == n && ingr_count != 1"
+                @click="clearIngr"
+                style="margin-top: 7px"
+              >
+                очистить всё
               </button>
             </div>
-            <input type="text" placeholder="..." id="input_add_step" required />
-            <button
-              v-if="n < 10 && steps_count.length == n"
-              @click="countStep(n)"
+          </div>
+        </div>
+        <div class="recipe_input steps_recipe" v-auto-animate>
+          <label for="input_add_step1">Шаги рецепта</label>
+          <div v-for="n in steps_count" :key="n">
+            <div
+              v-if="steps_count.length >= n"
+              style="display: flex; flex-direction: column; gap: 6px"
             >
-              +
-            </button>
+              <div class="recipe_delete_step">
+                <h2>{{ n }} шаг</h2>
+                <button
+                  v-if="steps_count.length == n && steps_count.length != 1"
+                  @click="deleteStep(n)"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="11"
+                    height="11"
+                    viewBox="0 0 11 11"
+                    fill="none"
+                  >
+                    <path
+                      d="M1 1L10 10"
+                      stroke="#333333"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M10 1L1 10"
+                      stroke="#333333"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="..."
+                :id="`input_add_step${n}`"
+                v-model="step_info[n - 1]"
+                autocomplete="off"
+                required
+              />
+              <button
+                v-if="n < 10 && steps_count.length == n"
+                @click="countStep(n)"
+              >
+                +
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="recipe_input">
-        <label for="input_add_time">Время готовки</label>
-        <input
-          type="time"
-          placeholder="..."
-          id="input_add_time"
-          style="width: 144px; font-size: 27px"
-        />
-      </div>
-      <h1 class="add_h">Категория блюда</h1>
-      <div class="recipe_add_category">
         <div class="recipe_input">
-          <div class="recipe_input_items">
-            <input
-              type="checkbox"
-              name="time_category"
-              id="time_category_breakfast"
-            />
-            <label for="time_category_breakfast">завтрак</label>
+          <label for="input_add_time">Время готовки</label>
+          <input
+            type="number"
+            placeholder="мин."
+            id="input_add_time"
+            v-model="cooking_time"
+            style="width: 144px; font-size: 18px"
+            autocomplete="off"
+            min="1"
+            max="999"
+            required
+          />
+        </div>
+        <h1 class="add_h">Категория блюда</h1>
+        <div class="recipe_add_category">
+          <div class="recipe_input">
+            <div class="recipe_input_items">
+              <input
+                type="checkbox"
+                name="time_category"
+                id="time_category_breakfast"
+                v-model="meal_1"
+                @change="mealTimeAdd(meal_1, 1)"
+              />
+              <label for="time_category_breakfast">завтрак</label>
+            </div>
+            <div class="recipe_input_items">
+              <input
+                type="checkbox"
+                name="time_category"
+                id="time_category_lunch"
+                v-model="meal_2"
+                @change="mealTimeAdd(meal_2, 2)"
+              />
+              <label for="time_category_lunch">обед</label>
+            </div>
+            <div class="recipe_input_items">
+              <input
+                type="checkbox"
+                name="time_category"
+                id="time_category_diner"
+                v-model="meal_3"
+                @change="mealTimeAdd(meal_3, 3)"
+              />
+              <label for="time_category_diner">ужин</label>
+            </div>
           </div>
-          <div class="recipe_input_items">
-            <input
-              type="checkbox"
-              name="time_category"
-              id="time_category_lunch"
-            />
-            <label for="time_category_lunch">обед</label>
-          </div>
-          <div class="recipe_input_items">
-            <input
-              type="checkbox"
-              name="time_category"
-              id="time_category_diner"
-            />
-            <label for="time_category_diner">ужин</label>
+          <div class="recipe_input">
+            <div v-for="i in categorys" :key="i.id">
+              <div class="recipe_input_items">
+                <input
+                  type="radio"
+                  name="time_category"
+                  :id="`time_category_` + i.id"
+                  @change="categoryChange(i.id)"
+                  required
+                />
+                <label :for="`time_category_` + i.id">{{ i.name }}</label>
+              </div>
+            </div>
           </div>
         </div>
         <div class="recipe_input">
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_1" />
-            <label for="time_category_1">десерт</label>
-          </div>
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_2" />
-            <label for="time_category_2">мясо</label>
-          </div>
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_3" />
-            <label for="time_category_3">суп</label>
-          </div>
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_4" />
-            <label for="time_category_4">рыба</label>
-          </div>
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_5" />
-            <label for="time_category_5">напиток</label>
-          </div>
-          <div class="recipe_input_items">
-            <input type="radio" name="time_category" id="time_category_6" />
-            <label for="time_category_6">основное</label>
-          </div>
+          <label>Лицевая картинка рецепта</label>
+          <input
+            type="file"
+            ref="fileInput"
+            @change="handleFileUpload($event)"
+            required
+          />
         </div>
+        <!-- <div class="recipe_input">
+          <label>Дополнительные картинки блюда</label>
+          <button>выбрать файл</button>
+        </div> -->
+        <input type="submit" value="Добавить рецепт" class="add_recipe_btn" />
       </div>
-      <div class="recipe_input">
-        <label>Лицевая картинка рецепта</label>
-        <button>выбрать файл</button>
-      </div>
-      <div class="recipe_input">
-        <label>Дополнительные картинки блюда</label>
-        <button>выбрать файл</button>
-      </div>
-      <button class="add_recipe_btn">Добавить рецепт</button>
-    </div>
+    </form>
   </div>
 </template>
   
@@ -239,6 +273,7 @@ const { data: ingredients } = await useFetch(
 const { data: system_of_calculation } = await useFetch(
   "http://127.0.0.1:8000/system_of_calculation/"
 );
+const { data: categorys } = await useFetch("http://127.0.0.1:8000/category/");
 </script>
 
 <script>
@@ -246,37 +281,153 @@ export default {
   data() {
     return {
       steps_count: [1],
+      step_info: [],
+      token: "",
       ingr_count: 1,
+      name: "",
+      id_category: 0,
+      cooking_time: null,
+      id_mealtime: [],
+      step_input: [],
+      count_input: [],
+      id_ingr: [],
+      count: [],
+      id_syst_calc: [],
+      meal_1: false,
+      meal_2: false,
+      meal_3: false,
+      form: null,
     };
   },
   methods: {
+    stepAdd(value) {
+      this.step_input.push(value);
+    },
+    mealTimeAdd(item, id) {
+      if (item == true) {
+        this.id_mealtime.push(id);
+      } else {
+        let index = this.id_mealtime.indexOf(id);
+        if (index >= 0) {
+          this.id_mealtime.splice(index, 1);
+        }
+      }
+      this.id_mealtime.sort();
+    },
+    categoryChange(id) {
+      this.id_category = id;
+    },
     countStep: function (n) {
       this.steps_count.push(n + 1);
+      this.step_info.push(null);
     },
     deleteStep: function (n) {
       if (this.steps_count.length > 1) {
         this.steps_count.pop();
       }
+      this.step_info.pop();
     },
     countIngr: function () {
       this.ingr_count = this.ingr_count + 1;
+      this.id_ingr.push(null);
+      this.count.push(null);
+      this.id_syst_calc.push(null);
     },
     deleteIngr: function () {
       if (this.ingr_count > 1) {
         this.ingr_count = this.ingr_count - 1;
+        this.id_ingr.pop();
+        this.count.pop();
+        this.id_syst_calc.pop();
       }
     },
     clearIngr: function () {
       if (this.ingr_count > 1) {
         this.ingr_count = 1;
+        this.id_ingr = [];
+        this.count = [];
+        this.id_syst_calc = [];
       }
     },
+    post_recipe(token) {
+      this.step_input = [];
+      for (let i = 0; i < this.step_info.length; i++) {
+        let item = { info: this.step_info[i] };
+        this.step_input.push(item);
+      }
+      this.count_input = [];
+      if (
+        this.id_ingr.length == this.count.length &&
+        this.id_ingr.length == this.id_syst_calc.length
+      ) {
+        for (let i = 0; i < this.id_ingr.length; i++) {
+          let item_i = {
+            id_ingredient: this.id_ingr[i],
+            count: this.count[i],
+            id_system_of_calc: this.id_syst_calc[i],
+          };
+          this.count_input.push(item_i);
+        }
+      }
+      let credetentials_rec = {
+        recipe_input: {
+          name: this.name,
+          id_category: this.id_category,
+          cooking_time: this.cooking_time,
+          id_mealtime: this.id_mealtime,
+        },
+        step_input: this.step_input,
+        count_input: this.count_input,
+      };
+      fetch("http://127.0.0.1:8000/recipe/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(credetentials_rec),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            const fileInput = this.$refs.fileInput;
+            const formData = new FormData();
+            formData.append("file", fileInput.files[0]);
+
+            console.log(formData);
+            fetch("http://127.0.0.1:8000/recipe/img", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+              body: formData,
+            })
+              .then((response) => response.json())
+              .then((json) => {
+                if (!json.detail) {
+                  alert("Ваш рецепт был отправлен на проверку");
+                } else {
+                  console.log(json.detail);
+                }
+              });
+          } else {
+            this.error = true;
+          }
+        });
+    },
+    handleFileUpload(e) {
+      this.form = e.target.files[0];
+    },
+  },
+  beforeMount() {
+    this.token = localStorage.getItem("access_token");
   },
 };
 </script>
   
 <style scoped>
 .add_recipe_btn {
+  cursor: pointer;
   border-radius: 3px;
   background: rgb(235, 81, 96);
   width: 310px;
@@ -287,9 +438,10 @@ export default {
   line-height: 24px;
   margin-top: 10px;
 }
-.recipe_input button {
-  width: 223px;
-  height: 35px;
+.recipe_input input[type="file"] {
+  cursor: pointer;
+  width: 423px;
+  height: 50px;
   margin-top: 2px;
   box-sizing: border-box;
   border: 1px solid rgb(235, 81, 96);
@@ -300,10 +452,10 @@ export default {
   line-height: 20px;
   transition: 0.1s;
 }
-.recipe_input button:hover {
+.recipe_input input[type="file"]:hover {
   background: rgb(247, 247, 247);
 }
-.recipe_input button:active {
+.recipe_input input[type="file"]:active {
   background: #eb5160;
   color: #fff;
 }
