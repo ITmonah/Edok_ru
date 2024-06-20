@@ -1,7 +1,9 @@
 <template>
   <div class="main_div">
     <div class="enter">
-      <h1>Edok<span>.ru</span></h1>
+      <Transition>
+        <h1>Edok<span>.ru</span></h1>
+      </Transition>
       <p>
         Погрузитесь в мир вкусных и ярких блюд на нашем кулинарном сайте! Будь
         то завтрак, обед, ужин, десерт или даже напиток - у нас есть рецепт на
@@ -34,6 +36,15 @@ const { data: user } = await useFetch("http://127.0.0.1:8000/user/top");
 </script>
 
 <style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
 .best_chefs h1 {
   margin-left: 42px;
 }
@@ -104,7 +115,7 @@ const { data: user } = await useFetch("http://127.0.0.1:8000/user/top");
   .enter {
     padding-left: 5%;
     padding-right: 5%;
-    height: 471px;
+    height: 510px;
   }
   .best_chefs_div {
     flex-direction: column;

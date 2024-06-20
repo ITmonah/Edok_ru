@@ -168,14 +168,16 @@
                   </svg>
                 </button>
               </div>
-              <input
+              <textarea
                 type="text"
                 placeholder="..."
                 :id="`input_add_step${n}`"
                 v-model="step_info[n - 1]"
                 autocomplete="off"
                 required
-              />
+                name=""
+                style="height: 100px"
+              ></textarea>
               <button
                 v-if="n < 10 && steps_count.length == n"
                 @click="countStep(n)"
@@ -508,7 +510,8 @@ export default {
   flex-direction: column;
   gap: 9px;
 }
-.recipe_input input {
+.recipe_input input,
+textarea {
   width: 100%;
   height: 41px;
   font-size: 20px;
