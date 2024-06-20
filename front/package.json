@@ -19,7 +19,8 @@
     "underscore": "^1.13.6",
     "vee-validate": "^4.13.1",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0"
+    "vue-router": "^4.3.0",
+    "vue3-burger-menu": "^1.1.1"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.12.0"

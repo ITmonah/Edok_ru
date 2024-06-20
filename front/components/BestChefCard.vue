@@ -35,7 +35,7 @@
           stroke-width="2"
         />
       </svg>
-      <span v-bind:style="{ color: color_chef }">4.66</span>
+      <span v-bind:style="{ color: color_chef }">{{ user.raiting * 10 }}</span>
       <svg
         width="24"
         height="24"

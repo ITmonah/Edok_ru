@@ -334,4 +334,47 @@ export default defineComponent({
   height: 201px;
   object-fit: cover;
 }
+@media screen and (max-width: 880px) {
+  .card_recipe {
+    justify-content: space-between;
+    gap: 26px;
+  }
+}
+@media screen and (max-width: 700px) {
+  .card_recipe {
+    flex-direction: column;
+    margin-right: 5%;
+    gap: 12px;
+  }
+  .card_recipe_info {
+    gap: 12px;
+  }
+  .card_recipe_text {
+    gap: 18px;
+  }
+  .thumb {
+    width: 100%;
+    height: 351px;
+    object-fit: cover;
+  }
+  .card_category {
+    font-size: 20px;
+    gap: 8px;
+  }
+  .card_category span {
+    gap: 8px;
+  }
+  .recipe_name {
+    font-size: 26px;
+  }
+  .card_recipe_info {
+    font-size: 18px;
+  }
+  .recipe_date {
+    font-size: 18px;
+  }
+  .card_recipe_text {
+    width: 100%;
+  }
+}
 </style>

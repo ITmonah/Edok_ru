@@ -1,63 +1,83 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <div
-        class="modal"
-        role="dialog"
-        aria-labelledby="modalTitle"
-        aria-describedby="modalDescription"
-      >
-        <div class="modal_head">
-          <button
-            type="button"
-            class="btn-close"
-            @click="close1"
-            aria-label="Close modal"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              fill="none"
+      <form @submit.prevent="get_reg()">
+        <div
+          class="modal"
+          role="dialog"
+          aria-labelledby="modalTitle"
+          aria-describedby="modalDescription"
+        >
+          <div class="modal_head">
+            <button
+              type="button"
+              class="btn-close"
+              @click="close1"
+              aria-label="Close modal"
             >
-              <path
-                d="M8.75 8.75L21.25 21.25"
-                stroke="#333333"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M8.75 21.25L21.25 8.75"
-                stroke="#333333"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-          <button type="button" class="btn-close-reg" @click="close">
-            Назад
-          </button>
-          <h1>Регистрация</h1>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 30 30"
+                fill="none"
+              >
+                <path
+                  d="M8.75 8.75L21.25 21.25"
+                  stroke="#333333"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.75 21.25L21.25 8.75"
+                  stroke="#333333"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <button type="button" class="btn-close-reg" @click="close">
+              Назад
+            </button>
+            <h1>Регистрация</h1>
+          </div>
+          <div class="input_form">
+            <label for="auth2">Email</label>
+            <input
+              type="email"
+              id="auth2"
+              v-model="login"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="input_form">
+            <label for="auth3">Отображаемое имя</label>
+            <input
+              type="text"
+              id="auth3"
+              v-model="name"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="input_form">
+            <label for="auth4">Пароль</label>
+            <input
+              type="password"
+              id="auth4"
+              v-model="password"
+              required
+              autocomplete="off"
+            />
+          </div>
+          <div class="btns">
+            <button class="btn-sub" :disabled="isDisabled">Регистрация</button>
+          </div>
         </div>
-        <div class="input_form">
-          <label for="auth2">Email</label>
-          <input type="email" id="auth2" v-model="login" />
-        </div>
-        <div class="input_form">
-          <label for="auth3">Отображаемое имя</label>
-          <input type="text" id="auth3" v-model="name" />
-        </div>
-        <div class="input_form">
-          <label for="auth4">Пароль</label>
-          <input type="text" id="auth4" v-model="password" />
-        </div>
-        <div class="btns">
-          <button class="btn-sub" @click="get_reg()">Регистрация</button>
-        </div>
-      </div>
+      </form>
     </div>
   </transition>
 </template>
@@ -70,6 +90,7 @@ export default {
       login: "",
       password: "",
       name: "",
+      isDisabled: false,
     };
   },
   methods: {
@@ -86,6 +107,7 @@ export default {
         mail: this.login,
         password: this.password,
       };
+      this.isDisabled = true;
       fetch("http://127.0.0.1:8000/user/reg", {
         method: "POST",
         headers: {
@@ -96,9 +118,17 @@ export default {
         .then((response) => response.json())
         .then((json) => {
           if (!json.detail) {
-            location.reload();
+            this.isDisabled = true;
+            alert("Успешная регистрация");
+            this.close();
+            this.isDisabled = false;
           } else {
-            this.error = true;
+            if (this.password < 6) {
+              alert("Минимальная длина пароля - 6 символов");
+            } else {
+              this.isDisabled = false;
+              alert(JSON.stringify(json.detail));
+            }
           }
         });
     },
@@ -145,6 +175,7 @@ export default {
   height: 24px;
   margin: 0 auto;
 }
+
 .btn-sub {
   border-radius: 6px;
   background: rgb(235, 81, 96);
@@ -154,6 +185,10 @@ export default {
   font-size: 20px;
   font-weight: 600;
   line-height: 24px;
+  transition: 0.3s;
+}
+.btn-sub:disabled {
+  opacity: 0.5;
 }
 .modal-backdrop h1 {
   color: rgb(0, 0, 0);

@@ -7,7 +7,12 @@
         {{ $route.query.text }}
       </div>
       <div class="text-field__icon">
-        <input type="text" placeholder="Название рецепта" />
+        <input
+          type="search"
+          placeholder="Название рецепта"
+          v-model="name"
+          @change="get_recipes()"
+        />
         <span class="text-field__aicon">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -39,28 +44,42 @@
         <p>Сортировать:</p>
         <input
           type="radio"
-          value=""
+          v-model="sorting"
+          value="raiting"
           name="recipe_radio"
+          @change="get_recipes()"
           id="rad1_recipes"
           checked
         /><label for="rad1_recipes">по рейтингу</label>
 
         <input
           type="radio"
-          value=""
+          v-model="sorting"
+          value="created_at"
           name="recipe_radio"
+          @change="get_recipes()"
           id="rad2_recipes"
         /><label for="rad2_recipes">по дате добавления</label>
 
         <input
           type="radio"
-          value=""
+          v-model="sorting"
+          value="cooking_time"
           name="recipe_radio"
+          @change="get_recipes()"
           id="rad3_recipes"
         /><label for="rad3_recipes">по времени</label>
       </div>
       <div>
-        <select v-model="category_recipe" @change="get_recipes()">
+        <select
+          v-model="category_recipe"
+          @change="
+            () => {
+              page_number = 1;
+              get_recipes();
+            }
+          "
+        >
           <option value="all">Все категории</option>
           <option v-for="item in mealtime" :key="item.id" :value="item.name">
             {{ item.name }}
@@ -71,7 +90,7 @@
         </select>
       </div>
     </div>
-    <div class="recipes_cards_div">
+    <div class="recipes_cards_div" v-auto-animate>
       <div v-for="p in recipes.items" :key="p.id">
         <RecipeCard :recipe="p" />
       </div>
@@ -79,6 +98,7 @@
         <h1>Ничего не найдено...</h1>
       </div>
     </div>
+
     <div class="pagination">
       <div v-for="item in recipes.pages" :key="item">
         <div v-if="item == 1">
@@ -87,7 +107,7 @@
             :id="`radio_` + item"
             name="pagin"
             @change="aboba(item)"
-            checked
+            :checked="page_number == 1"
           />
           <label :for="`radio_` + item">{{ item }}</label>
         </div>
@@ -119,8 +139,11 @@ export default {
       recipes: {},
       error: false,
       category_recipe: "all",
+      sorting: "raiting",
+      name: "",
     };
   },
+
   methods: {
     changeColorBtn: function () {
       if (this.color_btn == "#eb5160") {
@@ -130,9 +153,9 @@ export default {
       }
     },
     get_recipes() {
-      if (this.category_recipe == "all") {
+      if (this.name != null && this.name != "") {
         fetch(
-          `http://127.0.0.1:8000/recipe/page/true?page=${this.page_number}&size=3`,
+          `http://127.0.0.1:8000/recipe/page/true/search/?name=${this.name}&page=${this.page_number}&size=50`,
           {
             method: "GET",
           }
@@ -146,21 +169,37 @@ export default {
             }
           });
       } else {
-        fetch(
-          `http://127.0.0.1:8000/recipe/page/true/category/?name=${this.category_recipe}&page=${this.page_number}&size=2`,
-          {
-            method: "GET",
-          }
-        )
-          .then((response) => response.json())
-          .then((json) => {
-            if (!json.detail) {
-              this.recipes = json;
-            } else {
-              this.error = true;
+        if (this.category_recipe == "all") {
+          fetch(
+            `http://127.0.0.1:8000/recipe/page/true?sort=${this.sorting}&page=${this.page_number}&size=3`,
+            {
+              method: "GET",
             }
-          });
-        console.log(this.recipes.items);
+          )
+            .then((response) => response.json())
+            .then((json) => {
+              if (!json.detail) {
+                this.recipes = json;
+              } else {
+                this.error = true;
+              }
+            });
+        } else {
+          fetch(
+            `http://127.0.0.1:8000/recipe/page/true/category/?name=${this.category_recipe}&sort=${this.sorting}&page=${this.page_number}&size=3`,
+            {
+              method: "GET",
+            }
+          )
+            .then((response) => response.json())
+            .then((json) => {
+              if (!json.detail) {
+                this.recipes = json;
+              } else {
+                this.error = true;
+              }
+            });
+        }
       }
     },
     aboba(page) {
@@ -175,6 +214,9 @@ export default {
 </script>
 
 <style scoped>
+input[type="search"] {
+  outline-offset: 0px;
+}
 .pagination {
   width: 100%;
   display: flex;
@@ -230,6 +272,7 @@ export default {
   font-weight: 500;
   line-height: 20px;
   transition: 0.1s;
+  user-select: none;
 }
 .recipes_sort label:hover {
   color: rgb(0, 0, 0);
@@ -283,7 +326,7 @@ export default {
   padding-left: 0.4rem;
 }
 .recipes_div {
-  min-height: 800px;
+  min-height: 900px;
   margin-left: 30px;
   margin-right: 30px;
   display: flex;

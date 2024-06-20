@@ -82,6 +82,7 @@
                   v-model="count[n - 1]"
                   min="1"
                   max="9999"
+                  step="1"
                   required
                   autocomplete="off"
                 />
@@ -406,6 +407,7 @@ export default {
               .then((json) => {
                 if (!json.detail) {
                   alert("Ваш рецепт был отправлен на проверку");
+                  location.reload();
                 } else {
                   console.log(json.detail);
                 }

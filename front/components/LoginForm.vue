@@ -1,58 +1,61 @@
 <template>
   <transition name="modal-fade">
     <div class="modal-backdrop">
-      <div
-        class="modal"
-        role="dialog"
-        aria-labelledby="modalTitle"
-        aria-describedby="modalDescription"
-      >
-        <div class="modal_head">
-          <button
-            type="button"
-            class="btn-close"
-            @click="close"
-            aria-label="Close modal"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="30"
-              height="30"
-              viewBox="0 0 30 30"
-              fill="none"
+      <form @submit.prevent="get_token()">
+        <div
+          class="modal"
+          role="dialog"
+          aria-labelledby="modalTitle"
+          aria-describedby="modalDescription"
+        >
+          <div class="modal_head">
+            <button
+              type="button"
+              class="btn-close"
+              @click="close"
+              aria-label="Close modal"
             >
-              <path
-                d="M8.75 8.75L21.25 21.25"
-                stroke="#333333"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-              <path
-                d="M8.75 21.25L21.25 8.75"
-                stroke="#333333"
-                stroke-width="2.5"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
-          </button>
-          <h1>Авторизация</h1>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="30"
+                height="30"
+                viewBox="0 0 30 30"
+                fill="none"
+              >
+                <path
+                  d="M8.75 8.75L21.25 21.25"
+                  stroke="#333333"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+                <path
+                  d="M8.75 21.25L21.25 8.75"
+                  stroke="#333333"
+                  stroke-width="2.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
+              </svg>
+            </button>
+            <h1>Авторизация</h1>
+          </div>
+          <div class="input_form">
+            <label for="auth">Email</label>
+            <input type="email" id="auth" v-model="login" required="" />
+          </div>
+          <div class="input_form">
+            <label for="auth1">Пароль</label>
+            <input type="password" id="auth1" v-model="password" required="" />
+          </div>
+          <div class="btns">
+            <button class="btn-sub" type="submit">Войти</button>
+            <p style="user-select: none">_</p>
+          </div>
         </div>
-        <div class="input_form">
-          <label for="auth">Email</label>
-          <input type="email" id="auth" v-model="login" required="" />
-        </div>
-        <div class="input_form">
-          <label for="auth1">Пароль</label>
-          <input type="password" id="auth1" v-model="password" required="" />
-        </div>
-        <div class="btns">
-          <button class="btn-sub" type="submit" @click="get_token()">
-            Войти
-          </button>
-          <button class="btn-reg" @click="close1">регистрация</button>
-        </div>
+      </form>
+      <div style="position: relative">
+        <button class="btn-reg" @click="close1">регистрация</button>
       </div>
     </div>
   </transition>
@@ -92,7 +95,11 @@ export default {
             localStorage.setItem("access_token", json.access_token);
             location.reload();
           } else {
-            this.error = true;
+            if (this.password.length < 6) {
+              alert("Минимальная длина пароля - 6 символов");
+            } else {
+              alert(JSON.stringify(json.detail));
+            }
           }
         });
     },
@@ -139,6 +146,9 @@ export default {
   width: 137px;
   height: 24px;
   margin: 0 auto;
+  position: absolute;
+  bottom: 35px;
+  right: -70px;
 }
 .btn-sub {
   border-radius: 6px;
@@ -166,6 +176,7 @@ export default {
   backdrop-filter: blur(5px);
   background-color: rgba(0, 0, 0, 0.3);
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   z-index: 10;

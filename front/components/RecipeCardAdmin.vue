@@ -63,7 +63,7 @@
       <button style="color: green" @click="pubRecipe(token)">
         Опубликовать
       </button>
-      <button style="color: red">Удалить</button>
+      <button style="color: red" @click="conf()">Удалить</button>
     </div>
   </div>
 </template>
@@ -89,6 +89,32 @@ export default defineComponent({
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify(credetentials),
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            location.reload();
+          } else {
+            this.error = true;
+          }
+        });
+    },
+    conf() {
+      const al = confirm("Вы действительно хотите удалить рецепт?");
+      if (al == true) {
+        this.delRecipe(this.token);
+      }
+    },
+    delRecipe(token) {
+      let credetentials_del = {
+        id_recipe: this.recipe.id,
+      };
+      fetch(`http://127.0.0.1:8000/recipe/${this.recipe.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(credetentials_del),
       })
         .then((response) => response.json())
         .then((json) => {

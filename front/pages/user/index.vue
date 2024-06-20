@@ -80,7 +80,7 @@
                 stroke-linejoin="round"
               />
             </svg>
-            <p>Рейтинг: 3.44</p>
+            <p>Рейтинг: {{ user.raiting }}</p>
           </div>
           <div class="stats_div">
             <svg
@@ -121,7 +121,7 @@
                 stroke-width="2"
               />
             </svg>
-            <p>Количество выложенных рецептов: 12</p>
+            <p>Количество выложенных рецептов: {{ user.count_r }}</p>
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@
         <button style="margin-top: 37px" @click="acc_exit()">
           Выйти из аккаунта
         </button>
-        <button>Удалить аккаунт</button>
+        <button @click="conf()">Удалить аккаунт</button>
       </div>
     </div>
   </div>
@@ -157,6 +157,7 @@ export default {
       user: {},
       authShow: false,
       error: false,
+      token: "",
       det: "",
     };
   },
@@ -179,6 +180,29 @@ export default {
           }
         });
     },
+    conf() {
+      const al = confirm("Вы действительно хотите удалить аккаунт?");
+      if (al == true) {
+        this.del_user(this.token);
+      }
+    },
+    del_user(token) {
+      fetch(`http://127.0.0.1:8000/user/my_profile_delete`, {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            this.acc_exit();
+          } else {
+            this.error = true;
+          }
+        });
+    },
     async acc_exit() {
       localStorage.setItem("access_token", "");
       await navigateTo({ path: "/" });
@@ -186,8 +210,8 @@ export default {
     },
   },
   beforeMount() {
-    let token = localStorage.getItem("access_token");
-    this.get_user(token);
+    this.token = localStorage.getItem("access_token");
+    this.get_user(this.token);
   },
 };
 </script>
