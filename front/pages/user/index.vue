@@ -17,7 +17,17 @@
     </div>
     <div class="bg_grey" v-if="!error">
       <div class="profile_head">
-        <img src="assets/img/avatar_demo.png" alt="avatar" />
+        <div class="profile_head1" style="">
+          <img :src="'http://127.0.0.1:8000/' + user.img_avatar" alt="avatar" />
+          <label for="file-upload" class="custom-file-upload"> Аватар </label>
+          <input
+            class="red_img"
+            id="file-upload"
+            type="file"
+            ref="fileInput"
+            @change="handleFileUpload($event)"
+          />
+        </div>
         <div class="profile_head_stats">
           <div class="stats_div">
             <svg
@@ -159,6 +169,7 @@ export default {
       error: false,
       token: "",
       det: "",
+      form: null,
     };
   },
   methods: {
@@ -186,6 +197,10 @@ export default {
         this.del_user(this.token);
       }
     },
+    handleFileUpload(e) {
+      this.form = e.target.files[0];
+      this.upd_img(this.token);
+    },
     del_user(token) {
       fetch(`http://127.0.0.1:8000/user/my_profile_delete`, {
         method: "DELETE",
@@ -198,6 +213,26 @@ export default {
         .then((json) => {
           if (!json.detail) {
             this.acc_exit();
+          } else {
+            this.error = true;
+          }
+        });
+    },
+    upd_img(token) {
+      const fileInput = this.$refs.fileInput;
+      const formData = new FormData();
+      formData.append("file", fileInput.files[0]);
+      fetch(`http://127.0.0.1:8000/user/my_profile_img`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        body: formData,
+      })
+        .then((response) => response.json())
+        .then((json) => {
+          if (!json.detail) {
+            location.reload();
           } else {
             this.error = true;
           }
@@ -365,5 +400,68 @@ export default {
   background: white;
   gap: 45px;
   border-radius: 0px 0px 22px 22px;
+}
+.profile_head1 {
+  position: relative;
+  max-width: 156px;
+  height: 156px;
+}
+.profile_head1 img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 102.5px;
+}
+
+.red_img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  border-radius: 102.5px;
+  width: 100%;
+  height: 100%;
+  top: 0px;
+  opacity: 0;
+  padding: auto;
+  transition: 0.3s;
+  background: url(assets/img/Pencil.svg);
+  background-repeat: no-repeat;
+  background-position: center center;
+}
+input[type="file"] {
+  display: none;
+}
+.custom-file-upload {
+  border: 1px solid #ccc;
+  display: inline-block;
+  padding: 6px 12px;
+  cursor: pointer;
+  position: absolute;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  top: 0px;
+  height: 100%;
+  opacity: 0;
+  border-radius: 102.5px;
+  color: #fff;
+}
+.custom-file-upload:hover {
+  transition: 0.3s;
+  opacity: 100;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+.red_img img {
+  position: absolute;
+  width: 58px;
+  height: 60px;
+  border-radius: 0px;
+}
+.red_img:hover {
+  opacity: 100;
 }
 </style>
