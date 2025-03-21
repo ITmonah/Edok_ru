@@ -17,8 +17,8 @@
     </div>
     <div class="bg_grey" v-if="!error">
       <div class="profile_head">
-        <div class="profile_head1" style="">
-          <img :src="url + '/' + user.img_avatar" alt="avatar" />
+        <div class="profile_head1" style="" v-if="url">
+          <img :src="url + '/' + user.image" alt="avatar" />
           <label for="file-upload" class="custom-file-upload"> Аватар </label>
           <input
             class="red_img"

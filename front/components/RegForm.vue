@@ -107,6 +107,7 @@ export default {
         name: this.name,
         mail: this.login,
         password: this.password,
+        token_phone: "",
       };
       this.isDisabled = true;
       fetch(`${this.url}/user/reg`, {
