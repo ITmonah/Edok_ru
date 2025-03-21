@@ -78,11 +78,12 @@ export default {
       this.$emit("click1");
     },
     async get_token() {
+      const url = useRuntimeConfig().public.apiBaseURL;
       let credetentials = {
         mail: this.login,
         pwd: this.password,
       };
-      fetch("http://127.0.0.1:8000/user/login", {
+      fetch(`${url}/user/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

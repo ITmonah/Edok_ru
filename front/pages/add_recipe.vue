@@ -270,13 +270,12 @@
 </template>
   
 <script setup>
-const { data: ingredients } = await useFetch(
-  "http://127.0.0.1:8000/ingredient/"
-);
+const url = useRuntimeConfig().public.apiBaseURL;
+const { data: ingredients } = await useFetch(`${url}/ingredient/?lang_code=ru`);
 const { data: system_of_calculation } = await useFetch(
-  "http://127.0.0.1:8000/system_of_calculation/"
+  `${url}/system_of_calculation/?lang_code=ru`
 );
-const { data: categorys } = await useFetch("http://127.0.0.1:8000/category/");
+const { data: categorys } = await useFetch(`${url}/category/?lang_code=ru`);
 </script>
 
 <script>
@@ -300,6 +299,7 @@ export default {
       meal_2: false,
       meal_3: false,
       form: null,
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
@@ -382,7 +382,7 @@ export default {
         step_input: this.step_input,
         count_input: this.count_input,
       };
-      fetch("http://127.0.0.1:8000/recipe/", {
+      fetch(`${this.url}/recipe/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -398,7 +398,7 @@ export default {
             formData.append("file", fileInput.files[0]);
 
             console.log(formData);
-            fetch("http://127.0.0.1:8000/recipe/img", {
+            fetch(`${this.url}/recipe/img`, {
               method: "POST",
               headers: {
                 Authorization: `Bearer ${token}`,

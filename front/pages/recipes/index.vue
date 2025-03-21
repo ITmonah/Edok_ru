@@ -126,8 +126,9 @@
 </template>
 
 <script setup>
-const { data: categorys } = await useFetch("http://127.0.0.1:8000/category/");
-const { data: mealtime } = await useFetch("http://127.0.0.1:8000/mealtime/");
+const url = useRuntimeConfig().public.apiBaseURL;
+const { data: categorys } = await useFetch(`${url}/category/?lang_code=ru`);
+const { data: mealtime } = await useFetch(`${url}/mealtime/?lang_code=ru`);
 </script>
 
 <script>
@@ -141,6 +142,7 @@ export default {
       category_recipe: "all",
       sorting: "raiting",
       name: "",
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
 
@@ -155,7 +157,7 @@ export default {
     get_recipes() {
       if (this.name != null && this.name != "") {
         fetch(
-          `http://127.0.0.1:8000/recipe/page/true/search/?name=${this.name}&page=${this.page_number}&size=50`,
+          `${this.url}/recipe/page/true/search/?name=${this.name}&page=${this.page_number}&size=50&lang_code=ru`,
           {
             method: "GET",
           }
@@ -171,7 +173,7 @@ export default {
       } else {
         if (this.category_recipe == "all") {
           fetch(
-            `http://127.0.0.1:8000/recipe/page/true?sort=${this.sorting}&page=${this.page_number}&size=3`,
+            `${this.url}/recipe/page/true?sort=${this.sorting}&page=${this.page_number}&size=3&lang_code=ru`,
             {
               method: "GET",
             }
@@ -186,7 +188,7 @@ export default {
             });
         } else {
           fetch(
-            `http://127.0.0.1:8000/recipe/page/true/category/?name=${this.category_recipe}&sort=${this.sorting}&page=${this.page_number}&size=3`,
+            `${this.url}/recipe/page/true/category/?name=${this.category_recipe}&sort=${this.sorting}&page=${this.page_number}&size=3&lang_code=ru`,
             {
               method: "GET",
             }

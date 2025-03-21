@@ -1,7 +1,7 @@
 <template>
   <div class="chef_card">
     <div>
-      <img :src="'http://127.0.0.1:8000/' + user.img_avatar" alt="avatar" />
+      <img :src="url + '/' + user.img_avatar" alt="avatar" />
     </div>
     <p>{{ user.name }}</p>
     <div class="chef_card_score">
@@ -71,6 +71,7 @@
 </template>
 
 <script setup>
+const url = useRuntimeConfig().public.apiBaseURL;
 const props = defineProps({
   color_chef: String,
   user: Object,

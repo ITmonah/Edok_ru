@@ -91,6 +91,7 @@ export default {
       password: "",
       name: "",
       isDisabled: false,
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
@@ -108,7 +109,7 @@ export default {
         password: this.password,
       };
       this.isDisabled = true;
-      fetch("http://127.0.0.1:8000/user/reg", {
+      fetch(`${this.url}/user/reg`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

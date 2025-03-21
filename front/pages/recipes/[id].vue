@@ -8,7 +8,8 @@
 import RecipeDetail from "~/components/RecipeDetail.vue";
 
 const { id } = useRoute().params;
-const uri = "http://127.0.0.1:8000/recipe/" + id;
+const url = useRuntimeConfig().public.apiBaseURL;
+const uri = `${url}/recipe/` + id + "?lang_code=ru";
 
 const { data: recipe } = await useFetch(uri);
 </script>

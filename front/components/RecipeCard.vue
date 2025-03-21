@@ -1,10 +1,6 @@
 <template>
   <div class="card_recipe">
-    <img
-      :src="'http://127.0.0.1:8000/' + recipe.face_img"
-      alt="recipe"
-      class="thumb"
-    />
+    <img :src="url + '/' + recipe.face_img" alt="recipe" class="thumb" />
     <div class="card_recipe_text">
       <div class="card_recipe_info">
         <p class="card_category">
@@ -78,6 +74,7 @@
 </script>
 
 <script>
+import { useRuntimeConfig } from "#app"; // Import from '#app'
 export default defineComponent({
   props: {
     recipe: Object,
@@ -93,11 +90,12 @@ export default defineComponent({
       dizlikes: this.recipe.dizlikes,
       like_status: 0,
       dizlike_status: 0,
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
     get_scores(token) {
-      fetch(`http://127.0.0.1:8000/score/info/${this.recipe.id}`, {
+      fetch(`${this.url}/score/info/${this.recipe.id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -136,7 +134,7 @@ export default defineComponent({
         let credetentials_d = {
           id_recipe: this.recipe.id,
         };
-        fetch(`http://127.0.0.1:8000/score/no/${this.recipe.id}`, {
+        fetch(`${this.url}/score/no/${this.recipe.id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -158,7 +156,7 @@ export default defineComponent({
         let credetentials = {
           id_recipe: this.recipe.id,
         };
-        fetch(`http://127.0.0.1:8000/score/like/${this.recipe.id}`, {
+        fetch(`${this.url}/score/like/${this.recipe.id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -184,7 +182,7 @@ export default defineComponent({
         let credetentials_diz_d = {
           id_recipe: this.recipe.id,
         };
-        fetch(`http://127.0.0.1:8000/score/no/${this.recipe.id}`, {
+        fetch(`${this.url}/score/no/${this.recipe.id}`, {
           method: "DELETE",
           headers: {
             "Content-Type": "application/json",
@@ -205,7 +203,7 @@ export default defineComponent({
         let credetentials_diz = {
           id_recipe: this.recipe.id,
         };
-        fetch(`http://127.0.0.1:8000/score/dizlike/${this.recipe.id}`, {
+        fetch(`${this.url}/score/dizlike/${this.recipe.id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

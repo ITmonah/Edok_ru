@@ -128,6 +128,7 @@ export default {
       user: {},
       add_link: "/add_recipe",
       togl: false,
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
@@ -147,7 +148,7 @@ export default {
       this.togl = false;
     },
     get_auth(token) {
-      fetch("http://127.0.0.1:8000/user/me", {
+      fetch(`${this.url}/user/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

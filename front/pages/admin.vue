@@ -48,11 +48,12 @@ export default {
       token: "",
       recipes: {},
       error: "",
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
     get_recipes(token) {
-      fetch(`http://127.0.0.1:8000/recipe/page/false?page=1&size=50`, {
+      fetch(`${this.url}/recipe/page/false?page=1&size=50&lang_code=ru`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,

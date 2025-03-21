@@ -16,7 +16,7 @@
         <b>{{ recipe.name }}</b>
       </h1>
       <img
-        :src="'http://127.0.0.1:8000/' + recipe.face_img"
+        :src="url + '/' + recipe.face_img"
         alt="face_img"
         style="width: 100%"
       />
@@ -76,6 +76,7 @@ export default defineComponent({
   data() {
     return {
       token: "",
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
@@ -83,7 +84,7 @@ export default defineComponent({
       let credetentials = {
         id_recipe: this.recipe.id,
       };
-      fetch(`http://127.0.0.1:8000/recipe/published/${this.recipe.id}`, {
+      fetch(`${this.url}/recipe/published/${this.recipe.id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -109,7 +110,7 @@ export default defineComponent({
       let credetentials_del = {
         id_recipe: this.recipe.id,
       };
-      fetch(`http://127.0.0.1:8000/recipe/${this.recipe.id}`, {
+      fetch(`${this.url}/recipe/${this.recipe.id}`, {
         method: "DELETE",
         headers: {
           Authorization: `Bearer ${token}`,

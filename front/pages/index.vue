@@ -31,8 +31,15 @@
 </template>
 
 <script setup>
-const { data: recipe } = await useFetch("http://127.0.0.1:8000/recipe/top/");
-const { data: user } = await useFetch("http://127.0.0.1:8000/user/top");
+import { useFetch, useRuntimeConfig } from "#app";
+
+const config = useRuntimeConfig();
+const apiBaseURL = config.public.apiBaseURL;
+
+const { data: recipe } = await useFetch(
+  `${apiBaseURL}/recipe/top/?lang_code=ru`
+);
+const { data: user } = await useFetch(`${apiBaseURL}/user/top`);
 </script>
 
 <style>

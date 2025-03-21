@@ -18,7 +18,7 @@
     <div class="bg_grey" v-if="!error">
       <div class="profile_head">
         <div class="profile_head1" style="">
-          <img :src="'http://127.0.0.1:8000/' + user.img_avatar" alt="avatar" />
+          <img :src="url + '/' + user.img_avatar" alt="avatar" />
           <label for="file-upload" class="custom-file-upload"> Аватар </label>
           <input
             class="red_img"
@@ -170,11 +170,12 @@ export default {
       token: "",
       det: "",
       form: null,
+      url: useRuntimeConfig().public.apiBaseURL,
     };
   },
   methods: {
     get_user(token) {
-      fetch("http://127.0.0.1:8000/user/me", {
+      fetch(`${this.url}/user/me`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -202,7 +203,7 @@ export default {
       this.upd_img(this.token);
     },
     del_user(token) {
-      fetch(`http://127.0.0.1:8000/user/my_profile_delete`, {
+      fetch(`${this.url}/user/my_profile_delete`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -222,7 +223,7 @@ export default {
       const fileInput = this.$refs.fileInput;
       const formData = new FormData();
       formData.append("file", fileInput.files[0]);
-      fetch(`http://127.0.0.1:8000/user/my_profile_img`, {
+      fetch(`${this.url}/user/my_profile_img`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
